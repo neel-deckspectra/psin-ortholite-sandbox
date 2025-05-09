@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="report_invoice_document_ortholite" inherit_id="account.report_invoice">
+        <xpath expr="//t[@t-foreach='docs']/t" position="before">
+            <t t-if="o and o.partner_id.l10n_in_gst_treatment == 'special_economic_zone'">
+                <t t-set="inv_header" t-value="'(SUPPLY MEANT FOR EXPORT/SUPPLY TO SEZ UNIT OR SEZ DEVELOPER FOR AUTHORISED OPERATIONS UNDER BOND OR LETTER OF UNDERTAKING WITHOUT PAYMENT OF IGST)'"/>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="l10n_in_einvoice_report_invoice_document_inherit_custom"  inherit_id="l10n_in_edi.l10n_in_einvoice_report_invoice_document_inherit">
+        <xpath expr="//div[@id='right-elements']/../div[@t-if='l10n_in_einvoice_json']" position="attributes">
+            <attribute name="style">page-break-inside: avoid;</attribute>
+        </xpath>
+    </template>
+
+    <template id="report_invoice_document_inherit_ortholite_account_reports"  inherit_id="account.report_invoice_document">
+        <xpath expr="//div[@name='address_not_same_as_shipping']/t/address" position="before">
+            <strong>Billing Address:</strong>
+        </xpath>
+        <xpath expr="//div[@name='address_same_as_shipping']/t/address" position="before">
+            <strong>Billing Address:</strong>
+        </xpath>
+        <xpath expr="//div[@name='reference']" position="attributes">
+            <t t-if="o.move_type == 'out_invoice'">
+                <attribute name="style">display: none;</attribute>
+            </t>
+        </xpath>
+        <xpath expr="//th[@name='th_description']" position="before">
+            <t t-if="o.move_type == 'out_invoice'">
+                <th name="th_reference" class="text-end">Reference</th>
+            </t>
+        </xpath>
+        <xpath expr="//td[@name='account_invoice_line_name']" position="before">
+            <t t-if="o.move_type == 'out_invoice'">
+                <td name="td_reference" class="text-end">
+                    <span t-field="line.sale_line_ids.order_id.client_order_ref"></span>
+                </td>
+            </t>
+        </xpath>
+        <xpath expr="//table[@name='invoice_line_table']" position="after">
+            <div class="row">
+                <div class="col-7">
+                </div>
+                <div class="col-5">
+                    <strong style="margin-left: -12px;">Sub Total Quantity:  </strong><t t-esc="sum(line.quantity for line in o.invoice_line_ids)"/><br/>
+                </div>
+            </div>
+        </xpath>
+        <xpath expr="//div[@name='comment']" position="after">
+            <t t-if="o.move_type == 'out_invoice'">
+                <div class="row">
+                    <div class="col-4 text-center">
+                        <t t-if="o.create_uid.id != 1">
+                            <span t-field="o.create_uid.name"/>
+                        </t>
+                    </div>
+                    <div class="col-4 text-center">
+                    </div>
+                    <div class="col-4 text-center">
+                        <t t-esc="o.get_datetime()"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4 text-center">
+                        <strong>----------------------------------------</strong>
+                    </div>
+                    <div class="col-4 text-center">
+                        <strong>----------------------------------------</strong>
+                    </div>
+                    <div class="col-4 text-center">
+                        <strong>----------------------------------------</strong>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4 text-center">
+                        <strong>Prepared by</strong>
+                    </div>
+                    <div class="col-4 text-center">
+                        <strong> Authorised by</strong>
+                    </div>
+                    <div class="col-4 text-center">
+                        <strong> Current Date / Time</strong>
+                    </div>
+                </div>
+            </t>
+        </xpath>
+    </template>
+
+    <record id="paperformat_ortholite_account_reports" model="report.paperformat">
+        <field name="name">Invoices Report Paperformat</field>
+        <field name="default" eval="True" />
+        <field name="format">A4</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">50</field>
+        <field name="margin_bottom">14</field>
+        <field name="margin_left">7</field>
+        <field name="margin_right">7</field>
+        <field name="header_line" eval="False" />
+        <field name="header_spacing">50</field>
+        <field name="dpi">108</field>
+    </record>
+
+    <record id="account.account_invoices" model="ir.actions.report">
+        <field name="paperformat_id" ref="ortholite_account_reports.paperformat_ortholite_account_reports"/>
+    </record>
+
+</odoo>

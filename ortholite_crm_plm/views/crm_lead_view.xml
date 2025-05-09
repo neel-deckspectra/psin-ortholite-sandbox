@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="crm_lead_view_form2_praw" model="ir.ui.view">
+        <field name="name">crm.lead.view.form2.inherit.praw</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form" />
+        <field name="arch" type="xml">
+            <button name="action_schedule_meeting" position="after">
+                <button class="oe_stat_button" type="object"
+                    name="action_view_plm" icon="fa-folder-open" invisible="type == 'lead'">
+                    <field name="plm_count" widget="statinfo" string="PLM"/>
+                </button>
+            </button>
+            <xpath expr="//group[@name='opportunity_partner']/div[hasclass('o_row')][2]" position="after">
+                <field name="product_category_ids" widget="many2many_tags"/>
+            </xpath>
+            <xpath expr="//field[@name='tag_ids']" position="after">
+                <field name="product_attribute_ids" widget="many2many_tags"/>
+            </xpath>
+        </field>
+    </record>
+    
+</odoo>

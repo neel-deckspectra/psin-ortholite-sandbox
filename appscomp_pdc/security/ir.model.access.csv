@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_post_dated_cheques,post_dated_cheques,model_post_dated_cheques,account.group_account_invoice,1,1,1,0
+access_post_dated_cheques_sales,post_dated_cheques_sales,model_post_dated_cheques,sales_team.group_sale_salesman,1,1,1,0
+access_pdc_report_wizard,pdc_report_wizard,model_pdc_report_wizard,,1,1,1,1

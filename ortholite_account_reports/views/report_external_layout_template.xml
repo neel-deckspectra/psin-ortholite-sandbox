@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="external_layout_striped_custom" inherit_id="web.external_layout_striped">
+        <xpath expr="//div[hasclass('o_background_header')]" position="inside">
+            <div class="text-center" t-if="inv_header">
+                <strong t-out="inv_header"/>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="external_layout_boxed_custom" inherit_id="web.external_layout_boxed">
+        <xpath expr="//div[hasclass('o_boxed_header')]" position="inside">
+            <div class="text-center" t-if="inv_header">
+                <strong t-out="inv_header"/>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="external_layout_bold_custom" inherit_id="web.external_layout_bold">
+        <xpath expr="//div[hasclass('o_clean_header')]" position="inside">
+            <div class="text-center" t-if="inv_header">
+                <strong t-out="inv_header"/>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="external_layout_standard_custom" inherit_id="web.external_layout_standard">
+        <xpath expr="//div" position="inside">
+            <div class="text-center" t-if="inv_header">
+                <strong t-out="inv_header"/>
+            </div>
+        </xpath>
+    </template>
+</odoo>

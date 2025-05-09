@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <function name="write" model="ir.model.data">
+            <value model="ir.model.data" search="[('module', '=', 'purchase_request'), ('name', '=', 'seq_purchase_request')]"/>
+            <value eval="{'noupdate': False}"/>
+        </function>
+
+        <record id="purchase_request.seq_purchase_request" model="ir.sequence">
+            <field name="prefix"></field>
+        </record>
+
+        <function name="write" model="ir.model.data">
+            <value model="ir.model.data" search="[('module', '=', 'purchase_request'), ('name', '=', 'seq_purchase_request')]"/>
+            <value eval="{'noupdate': True}"/>
+        </function>
+</odoo>

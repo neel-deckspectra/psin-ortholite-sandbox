@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_pdc_cheque_search" model="ir.ui.view">
+            <field name="name">post.dated.cheques.search</field>
+            <field name="model">post.dated.cheques</field>
+            <field name="arch" type="xml">
+                <search string="PDC">
+                    <field name="name" filter_domain="[('name','ilike',self)]" string="PDC Reference"/>
+                    <field name="payment_id" filter_domain="[('payment_id','ilike',self)]" string="Payment Reference"/>
+                    <field name="partner_id" filter_domain="[('partner_id','ilike',self)]" string="Partner"/>
+                    <separator/>
+                    <group expand="0" string="Group By">
+                        <filter string="Status" name="status_group" domain="" context="{'group_by':'state'}"/>
+                        <filter string="Partner" name="partner_group" domain="" context="{'group_by':'partner_id'}"/>
+                        <filter string="Journal" name="journal_group" domain="" context="{'group_by':'journal_id'}"/>
+                        <filter string="Payment Date" name="payment_date_group" domain=""
+                                context="{'group_by':'payment_date'}"/>
+                        <filter string="Effective Date" name="effective_date_group" domain=""
+                                context="{'group_by':'effective_date'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        <record id="view_pdc_tree" model="ir.ui.view">
+            <field name="name">post.dated.cheques.tree</field>
+            <field name="model">post.dated.cheques</field>
+            <field name="arch" type="xml">
+                <tree decoration-info="state == 'draft'" decoration-muted="state in ['cancelled']"
+                      edit="false" create='false'>
+                    <field name="payment_date"/>
+                    <field name="name"/>
+                    <field name="journal_id"/>
+                    <field name="partner_id" string="Customer"/>
+                    <field name="amount" sum="Amount"/>
+                    <field name="state"/>
+                    <field name="company_id"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="partner_type" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_account_supplier_pdc_tree" model="ir.ui.view">
+            <field name="name">post.dated.cheques.tree</field>
+            <field name="model">post.dated.cheques</field>
+            <field name="inherit_id" ref="appscomp_pdc.view_pdc_tree"/>
+            <field name="mode">primary</field>
+            <field name="arch" type="xml">
+                <field name="partner_id" position="attributes">
+                    <attribute name="string">Vendor</attribute>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_pdc_form" model="ir.ui.view">
+            <field name="name">post.dated.cheques.form</field>
+            <field name="model">post.dated.cheques</field>
+            <field name="arch" type="xml">
+                <form string="Register PDC">
+                    <header>
+                        <button name="button_cheque_deposited" class="oe_highlight" string="Deposit"
+                                type="object"
+                                invisible="state != 'registered'"/>
+                        <button name="button_cheque_registered" class="oe_highlight"
+                                invisible="state != 'deposited'"
+                                string="Back"
+                                type="object"/>
+                        <button name="button_cheque_returned"
+                                invisible="state not in  ['deposited','registered']"
+                                string="Return"
+                                type="object"/>
+                        <button name="button_cheque_cancel"
+                                invisible="state not in  ['deposited','registered']"
+                                string="Cancel"
+                                type="object"/>
+                        <!--                        <button name="button_cheque_cleared" states="deposited" string="Clear" type="object"-->
+                        <!--                                class="oe_highlight"/>-->
+                        <button name="button_collect_cash"
+                                invisible="state != 'deposited'"
+                                string="Collect Cash" type="object"
+                                class="oe_highlight"/>
+                        <button name="button_cheque_unclear"
+                                invisible="state != 'done'"
+                                string="Unclear" type="object"
+                                class="oe_highlight"/>
+                        <button name="button_cheque_completed"
+                                invisible="state != 'done'"
+                                string="Payment Completed" type="object"
+                                class="oe_highlight"/>
+                        <button name="button_cheque_bounced"
+                                invisible="state != 'deposited'"
+                                string="Bounce" type="object"/>
+                        <button name="button_cheque_not_bounced"
+                                invisible="state != 'bounced'"
+                                string="Not Bounced" type="object"/>
+                        <button name="button_cheque_not_returned"
+                                invisible="state != 'returned'"
+                                string="Not Returned"
+                                type="object"/>
+                        <button name="button_cheque_not_cancelled"
+                                invisible="state != 'cancelled'"
+                                string="Not Cancelled"
+                                type="object"/>
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="registered,deposited,done,bounced,returned,cancelled"/>
+                    </header>
+                    <sheet>
+                        <field name="id" invisible="1"/>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group name="partner_group">
+                                <field name="payment_type" widget="radio"/>
+                                <field name="partner_type" widget="selection"
+                                       required="state == 'draft' or payment_type in ['inbound','outbound']"
+                                       invisible="payment_type not in ['inbound','outbound']"/>
+                                <field name="partner_id"
+                                       required="state == 'draft' or payment_type in ['inbound','outbound']"
+                                       invisible="payment_type not in ['inbound','outbound']"
+                                       context="{'default_is_company': True}"/>
+                                <field name="company_id" required="1"/>
+                                <field name="cheque_reference" required="1"/>
+                                <label for="amount"/>
+                                <div name="amount_div" class="o_row">
+                                    <field name="amount"/>
+                                    <field name="amounts" invisible="1"/>
+                                    <field name="currency_id" options="{'no_create': True, 'no_open': True}"
+                                           groups="base.group_multi_currency"/>
+                                </div>
+                                <field name="check_amount_in_words" readonly="1" force_save="1"/>
+                                <field name="journal_id"/>
+
+                            </group>
+                            <group>
+                                <field name="payment_date"/>
+                                <field name="effective_date" required="1"/>
+                                <field name="deposit_date"/>
+                                <field name="communication"/>
+                                <field name="invoice_reference" readonly="1" force_save="1"/>
+                                <field name="bank_reference"/>
+                                <field name="payment_id"/>
+                                <field name="more_reference" invisible="1"/>
+                                <field name="cheque_clear_id"
+                                       invisible="state not in ['done']"/>
+                                <field name="clearance_date"
+                                       invisible="state not in ['done']"/>
+                                <field name="unregister_pdc_id"
+                                       invisible="state not in ['bounced','returned','cancelled']"/>
+                                <field name="bounce_date"
+                                       invisible="state not in ['bounced']"/>
+                                <field name="return_date"
+                                       invisible="state not in ['returned']"/>
+                                <field name="cancel_date"
+                                       invisible="state not in ['cancelled']"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="o_attachment_preview"/>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_account_pdc_payments" model="ir.actions.act_window">
+            <field name="name">PDC Cheques</field>
+            <field name="res_model">post.dated.cheques</field>
+            <field name="view_mode">tree,kanban,form,graph</field>
+            <field name="context">{
+                'default_payment_type': 'inbound',
+                'default_partner_type': 'customer',
+                'res_partner_search_mode': 'customer',
+                }
+            </field>
+            <field name="domain">[('partner_type', '=', 'customer')]</field>
+            <field name="view_id" ref="view_pdc_tree"/>
+            <field name="search_view_id" ref="view_pdc_cheque_search"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Register a payment
+                </p>
+                <p>
+                    Payments are used to register liquidity movements. You can process those payments by your own means
+                    or by using installed facilities.
+                </p>
+            </field>
+        </record>
+
+        <record id="action_account_pdc_payments_payable" model="ir.actions.act_window">
+            <field name="name">PDC Cheques</field>
+            <field name="res_model">post.dated.cheques</field>
+            <field name="view_mode">tree,kanban,form,graph</field>
+            <field name="context">{
+                'default_payment_type': 'outbound',
+                'default_partner_type': 'supplier',
+                'res_partner_search_mode': 'supplier',
+                }
+            </field>
+            <field name="domain">[('partner_type', '=', 'supplier')]</field>
+            <field name="view_id" ref="view_account_supplier_pdc_tree"/>
+            <field name="search_view_id" ref="view_pdc_cheque_search"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Register a payment
+                </p>
+                <p>
+                    Payments are used to register liquidity movements. You can process those payments by your own means
+                    or by using installed facilities.
+                </p>
+            </field>
+        </record>
+
+        <record id="action_account_pdc_payments_all" model="ir.actions.act_window">
+            <field name="name">PDC Cheques</field>
+            <field name="res_model">post.dated.cheques</field>
+            <field name="view_mode">tree,kanban,form,graph</field>
+            <field name="view_id" ref="view_pdc_tree"/>
+            <field name="search_view_id" ref="view_pdc_cheque_search"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Register a payment
+                </p>
+                <p>
+                    Payments are used to register liquidity movements. You can process those payments by your own means
+                    or by using installed facilities.
+                </p>
+            </field>
+        </record>
+
+        <menuitem action="action_account_pdc_payments" id="menu_action_account_pdc_payments_receivable"
+                  parent="account.menu_finance_receivables" sequence="20"/>
+        <menuitem action="action_account_pdc_payments_payable" id="menu_action_account_pdc_payments_payable"
+                  parent="account.menu_finance_payables" sequence="25"/>
+
+    </data>
+</odoo>

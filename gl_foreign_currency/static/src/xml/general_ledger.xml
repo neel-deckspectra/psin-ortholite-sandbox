@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates>
+    <t t-name="gl_foreign_currency.search_template_curr" t-inherit="account_reports.AccountReportFiltersCustomizable">
+        <div id="filter_extra_options" position="after">
+            <div id="search_template_currency" class="filter_analytic">
+                <t t-call="gl_foreign_currency.search_template_currency"/>
+            </div>
+        </div>
+    </t>
+</templates>

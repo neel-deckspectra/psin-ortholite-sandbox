@@ -1,0 +1,25 @@
+<odoo>
+    <data>
+
+    <!-- Quotation Report -->
+    <template id="report_quote_document_ortholite" inherit_id="sale.report_saleorder_document">
+        <xpath expr="//div[@t-if='doc.user_id.name']" position="after">
+            <div t-if="doc.tag_ids" class="col-auto col-3 mw-100 mb-2" name="tag_ids">
+                <strong>Brand</strong><br/>
+                <span class="m-0" t-field="doc.tag_ids"/>
+            </div>
+        </xpath>
+    </template>
+
+    <!-- Invoice Report -->
+    <template id="report_invoice_document_ortholite" inherit_id="account.report_invoice_document">
+        <xpath expr="//div[@t-if='o.invoice_origin']" position="after">
+            <div t-if="o.brand_ids" t-attf-class="#{'col-auto col-3 mw-100' if report_type != 'html' else 'col'} mb-2" name="brand_ids">
+                <strong>Brand</strong><br/>
+                <span t-field="o.brand_ids"/>
+            </div>
+        </xpath>
+    </template>
+
+    </data>
+</odoo>

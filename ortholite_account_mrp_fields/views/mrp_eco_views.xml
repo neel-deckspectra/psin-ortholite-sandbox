@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="mrp_eco_view_form_inherit_ortholite" model="ir.ui.view">
+        <field name="name">mrp.eco.view.form.inherit.ortholite</field>
+        <field name="model">mrp.eco</field>
+        <field name="inherit_id" ref="mrp_plm.mrp_eco_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='tag_ids']" position="after">
+                <field name="quantity"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

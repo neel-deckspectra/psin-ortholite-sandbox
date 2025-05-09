@@ -1,0 +1,17 @@
+<odoo>
+    <record id="frontdesk_visitor_view_form_inherit" model="ir.ui.view">
+        <field name="name">frontdesk.visitor.view.form.inherit</field>
+        <field name="model">frontdesk.visitor</field>
+        <field name="inherit_id" ref="frontdesk.frontdesk_visitor_view_form"/>
+        <field name="arch" type="xml">
+        	<field name="duration" position="after">
+        		<field name="visiting_reason"/>
+        		<field name="govt_id"/>
+        	</field>
+            <field name="drink_ids" position="after">
+                <field name="oin_id_visitor_number"/>
+                <field name="electronic_device"/>
+            </field>
+        </field>
+    </record>
+</odoo>

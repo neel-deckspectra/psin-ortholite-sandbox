@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+
+        <record id="sale_report_view_tree_inherit_ortholite" model="ir.ui.view">
+            <field name="name">view.sale.report.tree.inherit.ortholite</field>
+            <field name="model">sale.report</field>
+            <field name="inherit_id" ref="sale.sale_report_view_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='state']" position="before">
+                    <field name="tag"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,79 @@
+<odoo>
+    <data>
+
+    <!-- Invoice Report -->
+    <template id="report_quote_document_ortholite" inherit_id="sale.report_saleorder_document">
+        <xpath expr="//div[@t-if='doc.user_id.name']" position="after">
+            <div t-if="doc.commitment_date" class="col-auto col-3 mw-100 mb-2" name="delivery_date">
+                <strong>ETD</strong><br/>
+                <span class="m-0" t-field="doc.commitment_date" t-options='{"widget": "date"}'/>
+            </div>
+        </xpath>
+        <xpath expr="//th[@name='th_quantity']" position="after">
+            <th name="th_product_categ" class="text-end">Product Category</th>
+        </xpath>
+        <xpath expr="//td[@name='td_quantity']" position="after">
+            <td name="td_product_categ" class="text-end">
+                <span t-field="line.product_categ_id"/>
+            </td>
+        </xpath>
+        <xpath expr="//div[@name='so_total_summary']" position="before">
+            <t t-set="total_qty" t-value="0"/>
+            <t t-foreach="doc.order_line" t-as="line">
+                <t t-set="total_qty" t-value="total_qty + line.product_uom_qty"/>
+            </t>
+            <div class="row">
+                <div class="col-6">
+                </div>
+                <div class="col-3">
+                    <strong>Sub Total Quantity:  </strong><t t-esc="total_qty"/><br/>
+                </div>
+            </div>
+        </xpath>
+        <xpath expr="//p[@id='fiscal_position_remark']" position="after">
+            <div class="row">
+                <div class="col-4 text-center">
+                    <t t-if="env.context.get('proforma', False) or is_pro_forma">
+                        <t t-if="doc.employee_id">
+                            <span t-field="doc.employee_id.name"/>
+                        </t>
+                    </t>
+                    <t t-else="">
+                        <t t-if="doc.create_uid.id != 1">
+                            <span t-field="doc.create_uid.name"/>
+                        </t>
+                    </t>
+                </div>
+                <div class="col-4 text-center">
+                </div>
+                <div class="col-4 text-center">
+                    <t t-esc="doc.get_datetime()"/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4 text-center">
+                    <strong>----------------------------------------</strong>
+                </div>
+                <div class="col-4 text-center">
+                    <strong>----------------------------------------</strong>
+                </div>
+                <div class="col-4 text-center">
+                    <strong>----------------------------------------</strong>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4 text-center">
+                    <strong>Prepared by</strong>
+                </div>
+                <div class="col-4 text-center">
+                    <strong> Authorised by</strong>
+                </div>
+                <div class="col-4 text-center">
+                    <strong> Current Date / Time</strong>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+    </data>
+</odoo>

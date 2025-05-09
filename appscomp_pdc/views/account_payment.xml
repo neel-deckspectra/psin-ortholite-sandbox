@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="inherit_account_payment_for_pdc_cheques" model="ir.ui.view">
+        <field name="name">account.payment.form.inherit.pdc.cheque</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button
+                        name="action_open_pdc_cheques_payments"
+                        icon="fa-asterisk"
+                        type="object"
+                        invisible="pdc_ids_count == 0"
+                        class="oe_inline oe_stat_button">
+                    <field name="pdc_ids_count" widget="statinfo" string="PDC(s)"/>
+                </button>
+            </xpath>
+            <xpath expr="//field[@name='ref']" position="after">
+                <field name="invoice_reference" readonly="1" force_save="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="account_journal_form_inherited" model="ir.ui.view">
+        <field name="name">account.journal.form.inherited</field>
+        <field name="model">account.journal</field>
+        <field name="inherit_id" ref="account.view_account_journal_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='group_alias_ro']" position="before">
+                <group string="Default Account">
+                    <field name="payment_debit_account_id"/>
+                    <field name="payment_credit_account_id"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_invoice_asset_category">
+        <field name="name">account.invoice.supplier.form</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <field name="invoice_date" position="after">
+                <field name="pdc_bool" invisible="1" readonly="1" force_save="1"/>
+            </field>
+            <xpath expr="//form/sheet/div[hasclass('oe_button_box')]" position="inside">
+                <button name="get_toll_entry_details_count" type="object"
+                        class="oe_stat_button" icon="fa-asterisk">
+                    <field name="pdc_count" widget="statinfo" string="PDC Count"
+                    />
+                </button>
+<!--                 invisible="pdc_ids_count == 0"-->
+            </xpath>
+            <xpath expr="//div[@class='oe_button_box']" position="after">
+                <widget name="web_ribbon" title="PDC RECEIVED" bg_color="bg-success"
+                        invisible="pdc_bool == False or move_type == 'in_invoice'"/>
+                <widget name="web_ribbon" title="PDC SUBMITTED" bg_color="bg-success"
+                        invisible="pdc_bool == False or move_type == 'out_invoice'"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

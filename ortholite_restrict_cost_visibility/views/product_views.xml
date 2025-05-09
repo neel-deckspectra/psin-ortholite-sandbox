@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <odoo>
+
+        <record id="product_template_form_view_inherit_ortholite" model="ir.ui.view">
+            <field name="name">product.template.common.form.inherit.ortholite</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='standard_price']" position="attributes">
+                    <attribute name="groups">ortholite_restrict_cost_visibility.group_cost_visibility</attribute>
+                </xpath>
+                <div name="options" position="inside">
+                    <span class="d-inline-block">
+                        <field name="is_fg_product"/>
+                        <label for="is_fg_product"/>
+                    </span>
+                    <span class="d-inline-block">
+                        <field name="is_materials"/>
+                        <label for="is_materials"/>
+                    </span>
+                    <span class="d-inline-block">
+                        <field name="is_general_item"/>
+                        <label for="is_general_item"/>
+                    </span>
+                </div>
+            </field>
+        </record>
+
+        <record id="product_template_only_form_view_inherit_ortholite_restrict_cost_visibility" model="ir.ui.view">
+            <field name="name">product.template.form</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_only_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='default_code']" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="product_normal_form_view_inherit_ortholite_restrict_cost_visibility" model="ir.ui.view">
+            <field name="name">product.product.form</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='default_code']" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </xpath>
+            </field>
+        </record>
+
+    </odoo>

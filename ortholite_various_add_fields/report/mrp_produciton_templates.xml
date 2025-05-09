@@ -1,0 +1,19 @@
+<odoo>
+    <data>
+
+        <!-- Production Order -->
+        <template id="report_mrp_production_components_ortholite" inherit_id="mrp.report_mrp_production_components">
+            <xpath expr="//thead/tr/th" position="after">
+                <th name="th_product_categ">
+                    <strong>Product Category</strong>
+                </th>
+            </xpath>
+            <xpath expr="//tbody/tr/td" position="after">
+                <td name="td_product_categ">
+                    <span t-field="raw_line.product_categ_id"/>
+                </td>
+            </xpath>
+        </template>
+
+    </data>
+</odoo>

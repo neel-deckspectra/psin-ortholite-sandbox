@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="low_stock_email_template" model="mail.template">
+        <field name="name">Low Stock e-mail template</field>
+        <field name="subject">Inventory Low &amp; High Stock Alert</field>
+        <field name="model_id" ref="ds_inventory_low_high_stock_alert.model_res_config_settings"/>
+        <field name="auto_delete" eval="True"/>
+        <field name="body_html">
+            <![CDATA[
+                <t t-if="object.notification_base == 'on_hand'">
+                    <p>Please find the attachment of the product's on hand low and high quantity</p><br/>
+                </t>
+                <t t-if="object.notification_base == 'fore_cast'">
+                    <p>Please find the attachment of the product's forecast low and high quantity</p><br/>
+                </t>
+            ]]>
+        </field>
+    </record>
+</odoo>

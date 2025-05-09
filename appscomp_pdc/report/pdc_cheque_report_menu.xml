@@ -1,0 +1,61 @@
+<odoo>
+    <data>
+        <!--        <record id="paperformat_pdc_cheque_report" model="report.paperformat">-->
+        <!--        <field name="name">Pos Cheque Report format</field>-->
+        <!--        <field name="default" eval="True"/>-->
+        <!--        <field name="format">A4</field>-->
+        <!--        <field name="page_height">0</field>-->
+        <!--        <field name="page_width">0</field>-->
+        <!--        <field name="orientation">Portrait</field>-->
+        <!--        <field name="margin_top">7</field>-->
+        <!--        <field name="margin_bottom">10</field>-->
+        <!--        <field name="margin_left">3</field>-->
+        <!--        <field name="margin_right">3</field>-->
+        <!--        <field name="header_line" eval="False"/>-->
+        <!--        <field name="header_spacing">0</field>-->
+        <!--        <field name="dpi">90</field>-->
+        <!--        </record>-->
+
+
+        <record id="paperformat_pdc_cheque_report" model="report.paperformat">
+            <field name="name">PDC Cheque Report format</field>
+            <field name="default" eval="True"/>
+            <field name="format">custom</field>
+            <field name="page_height">220</field>
+            <field name="page_width">120</field>
+            <field name="orientation">Landscape</field>
+            <field name="margin_top">2</field>
+            <field name="margin_bottom">0</field>
+            <field name="margin_left">3</field>
+            <field name="margin_right">3</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">0</field>
+            <field name="dpi">100</field>
+        </record>
+
+        <!--          <record id="menu_pdc_cheque_report" model="ir.actions.report">-->
+        <!--            <field name="name">Pos Cheque Report</field>-->
+        <!--            <field name="model">post.dated.cheques</field>-->
+        <!--            <field name="report_type">qweb-pdf</field>-->
+        <!--            <field name="report_name">appscomp_pdc.template_pdc_cheque_report</field>-->
+        <!--            <field name="report_file">appscomp_pdc.template_pdc_cheque_report</field>-->
+        <!--            <field name="paperformat_id" ref="appscomp_pdc.paperformat_pdc_cheque_report"/>-->
+        <!--            <field name="binding_type">report</field>-->
+        <!--        </record>-->
+
+
+        <record id="action_pdc_template_report" model="ir.actions.report">
+            <field name="name">Pos Cheque Report</field>
+            <field name="model">post.dated.cheques</field>
+            <field name="report_type">qweb-html</field>
+            <field name="report_name">appscomp_pdc.template_pdc_cheque_report</field>
+            <field name="report_file">appscomp_pdc.template_pdc_cheque_report</field>
+            <field name="print_report_name">'Pos Cheque Report - %s' % (object.name).replace('/', '')</field>
+            <field name="paperformat_id" ref="appscomp_pdc.paperformat_pdc_cheque_report"/>
+            <field name="binding_model_id" ref="model_post_dated_cheques"/>
+            <field name="binding_type">report</field>
+        </record>
+
+
+    </data>
+</odoo>

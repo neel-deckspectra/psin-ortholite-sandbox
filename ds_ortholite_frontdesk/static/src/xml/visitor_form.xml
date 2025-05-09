@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="ds_ortholite_frontdesk.VisitorForm" t-inherit="frontdesk.VisitorForm" t-inherit-mode="extension">
+        <xpath expr="//t[@t-if='props.stationInfo.authenticate_guest']" position="inside">
+            <div>
+                <label for="reason_for_visiting" class="form-label">Reason For Visiting <span class="small text-danger">*</span></label>
+                <input type="text" class="form-control" t-att-class="props.theme === 'light' ? '' : 'bg-700 border-0 text-white'" id="reason_for_visiting" t-ref="visitReason" placeholder="e.g. Reason For Visiting" required="1" t-att-value="props.visitorData.visitReason"/>
+                <label for="govt_id" class="form-label">GOVT ID <span class="small text-danger">*</span></label>
+                <input type="text" class="form-control" t-att-class="props.theme === 'light' ? '' : 'bg-700 border-0 text-white'" id="govt_id" t-ref="govtID" placeholder="e.g.GOVERNMENT ID" required="1" t-att-value="props.visitorData.govtID"/>
+                <label for="oin_id_visitor_number" class="form-label">OIN ID Visitor Number<span class="small text-danger">*</span></label>
+                <input type="text" class="form-control" t-att-class="props.theme === 'light' ? '' : 'bg-700 border-0 text-white'" id="oin_id_visitor_number" t-ref="oinIDvisitor_number" placeholder="e.g. OIN ID Visitor Number" required="1" t-att-value="props.visitorData.oinIDvisitor_number"/>
+                <label for="electronic_device" class="form-label">Electronic Device<span class="small text-danger"></span></label>
+                <input type="text" class="form-control" t-att-class="props.theme === 'light' ? '' : 'bg-700 border-0 text-white'" id="electronic_device" t-ref="electronicDevice" placeholder="e.g. Electronic Device" t-att-value="props.visitorData.electronicDevice"/>
+            </div>
+        </xpath>
+    </t>
+</templates>

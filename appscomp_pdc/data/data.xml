@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Sequences for purchase.rfq -->
+
+        <record id="sequence_pdc_customer" model="ir.sequence">
+            <field name="name">Payments Customer PDC</field>
+            <field name="code">account.payment.customer.pdc</field>
+            <field name="prefix">CUST.PDC/%(range_year)s/</field>
+            <field eval="1" name="number_next"/>
+            <field eval="1" name="number_increment"/>
+            <field eval="True" name="use_date_range"/>
+            <field eval="False" name="company_id"/>
+            <field name="padding">4</field>
+        </record>
+        <record id="sequence_pdc_supplier" model="ir.sequence">
+            <field name="name">Payments Supplier PDC</field>
+            <field name="code">account.payment.supplier.pdc</field>
+            <field name="prefix">SUPP.PDC/%(range_year)s/</field>
+            <field eval="1" name="number_next"/>
+            <field eval="1" name="number_increment"/>
+            <field eval="True" name="use_date_range"/>
+            <field eval="False" name="company_id"/>
+            <field name="padding">4</field>
+        </record>
+
+        <!--        <record id="ir_cron_pdc_due_date_follow_up" model="ir.cron">-->
+        <!--            <field name="name">PDC Due Date Follow Up for Customer/Supplier</field>-->
+        <!--            <field name="model_id" ref="appscomp_pdc.model_post_dated_cheques"/>-->
+        <!--            <field name="state">code</field>-->
+        <!--            <field name="code">model.cron_customer_pdc_follow_up()</field>-->
+        <!--            <field name="interval_number">1</field>-->
+        <!--            <field name="interval_type">days</field>-->
+        <!--            <field name="numbercall">-1</field>-->
+        <!--            <field eval="False" name="doall"/>-->
+        <!--            <field name="priority">1000</field>-->
+        <!--        </record>-->
+
+        <!--        <record id="email_template_customer_pdc_due_schedule_follow_ups" model="mail.template">-->
+        <!--            <field name="name">Customer PDC Deposit Due Schedule Follow-Up Notification - Send by Email</field>-->
+        <!--            <field name="model_id" ref="appscomp_pdc.model_post_dated_cheques"/>-->
+        <!--            <field name="subject">Customer PDC Deposit Due Schedule Follow-Up Notification :{{object.name}}</field>-->
+        <!--            <field name="email_from">{{object.company_id.email}}</field>-->
+        <!--            <field name="email_to">{{ctx['email_to']}}</field>-->
+        <!--            <field name="email_cc">{{object.partner_id.email}}</field>-->
+        <!--            <field name="auto_delete" eval="False"/>-->
+        <!--            <field name="body_html" type="html">-->
+        <!--                <div style="margin: 0px; padding: 0px;">-->
+        <!--                    <p style="margin: 0px; padding: 0px; font-size: 13px;">-->
+        <!--                        Dear-->
+        <!--                        <span style="font-weight:bold;" t-out="object.partner_id.name or ''"></span>,-->
+        <!--                        <br/>-->
+        <!--                        <br/>-->
+        <!--                        <p>Customer PDC Deposit Due Schedule Follow-Up :-->
+        <!--                            <strong>-->
+        <!--                                <t t-out="object.name or ''"></t>-->
+        <!--                            </strong>-->
+        <!--                            has been sent to Follow-up the Amount of-->
+        <!--                            <span style="font-weight:bold;" t-out="object.amount or ''"></span>-->
+        <!--                            <span style="font-weight:bold;" t-out="object.currency_id.name or ''"></span>-->
+        <!--                            . Please find the details as mentioned below.-->
+        <!--                            <br/>-->
+        <!--                        </p>-->
+        <!--                        <div>-->
+        <!--                            <strong>Reference :</strong>-->
+        <!--                            <t style="font-weight:bold;" t-out="object.name or ''"/>-->
+        <!--                            <br/>-->
+        <!--                            <strong>Due Date :</strong>-->
+
+        <!--                            <t style="font-weight:bold;" t-out="object.effective_date or ''"/>-->
+        <!--                            <br/>-->
+        <!--                            <strong>Customer :</strong>-->
+
+        <!--                            <t style="font-weight:bold;" t-out="object.partner_id.name or ''"/>-->
+        <!--                            <br/>-->
+        <!--                            <strong>Url:</strong>-->
+        <!--                            <t style="font-weight:bold;" t-out="ctx.get('url') or ''"/>-->
+        <!--                            <br/>-->
+        <!--                        </div>-->
+        <!--                        <br/>-->
+        <!--                        Best regards,-->
+        <!--                        <br/>-->
+        <!--                        <br/>-->
+        <!--                        <div class="col-8" align="left">-->
+        <!--                            <img src='/web/binary/company_logo' class="img-fluid img-thumbnail"-->
+        <!--                                 style=" max-width:20%;"/>-->
+        <!--                            <br/>-->
+        <!--                            <br/>-->
+        <!--                            <t style="font-weight:bold;" t-out="object.company_id.name or ''"/>-->
+        <!--                        </div>-->
+        <!--                        <br/>-->
+        <!--                        <br/>-->
+        <!--                        -&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;This is a system generated-->
+        <!--                        email&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-->
+        <!--                    </p>-->
+
+        <!--                </div>-->
+        <!--            </field>-->
+        <!--            <field name="report_template" ref="appscomp_pdc.action_pdc_template_report"/>-->
+        <!--            <field name="report_name">{{ (object.name or '').replace('/','_') }}</field>-->
+        <!--        </record>-->
+
+
+        <!--        <record id="email_template_supplier_pdc_due_schedule_follow_ups" model="mail.template">-->
+        <!--            <field name="name">Supplier PDC Deposit Due Schedule Follow-Up Notification - Send by Email</field>-->
+        <!--            <field name="model_id" ref="appscomp_pdc.model_post_dated_cheques"/>-->
+        <!--            <field name="subject">Supplier PDC Deposit Due Schedule Follow-Up Notification :{{object.name}}</field>-->
+        <!--            <field name="email_from">{{object.company_id.email}}</field>-->
+        <!--            <field name="email_to">{{ctx['email_to']}}</field>-->
+        <!--            <field name="email_cc">{{object.partner_id.email}}</field>-->
+        <!--            <field name="auto_delete" eval="False"/>-->
+        <!--            <field name="body_html" type="html">-->
+        <!--                <div style="margin: 0px; padding: 0px;">-->
+        <!--                    <p style="margin: 0px; padding: 0px; font-size: 13px;">-->
+        <!--                        Dear-->
+        <!--                        <span style="font-weight:bold;" t-out="object.partner_id.name or ''"></span>,-->
+        <!--                        <br/>-->
+        <!--                        <br/>-->
+        <!--                        <p>Supplier PDC Deposit Due Schedule Follow-Up :-->
+        <!--                            <strong>-->
+        <!--                                <t t-out="object.name or ''"></t>-->
+        <!--                            </strong>-->
+        <!--                            has been sent to Follow-up the Amount of-->
+        <!--                            <span style="font-weight:bold;" t-out="object.amount or ''"></span>-->
+        <!--                            <span style="font-weight:bold;" t-out="object.currency_id.name or ''"></span>-->
+        <!--                            . Please find the details as mentioned below.-->
+        <!--                            <br/>-->
+        <!--                        </p>-->
+        <!--                        <div>-->
+        <!--                            <strong>Reference :</strong>-->
+        <!--                            <t style="font-weight:bold;" t-out="object.name or ''"/>-->
+        <!--                            <br/>-->
+        <!--                            <strong>Due Date :</strong>-->
+        <!--                            <t style="font-weight:bold;" t-out="object.effective_date or ''"/>-->
+        <!--                            <br/>-->
+        <!--                            <strong>Customer :</strong>-->
+        <!--                            <t style="font-weight:bold;" t-out="object.partner_id.name or ''"/>-->
+        <!--                            <br/>-->
+        <!--                            <strong>Url:</strong>-->
+
+        <!--                            <t style="font-weight:bold;" t-out="ctx.get('url') or ''"/>-->
+        <!--                            <br/>-->
+        <!--                        </div>-->
+        <!--                        <br/>-->
+        <!--                        Best regards,-->
+        <!--                        <br/>-->
+        <!--                        <br/>-->
+        <!--                        <div class="col-8" align="left">-->
+        <!--                            <img src='/web/binary/company_logo' class="img-fluid img-thumbnail"-->
+        <!--                                 style=" max-width:20%;"/>-->
+        <!--                            <br/>-->
+        <!--                            <br/>-->
+        <!--                            <t style="font-weight:bold;" t-out="object.company_id.name or ''"/>-->
+        <!--                        </div>-->
+        <!--                        <br/>-->
+        <!--                        <br/>-->
+        <!--                        -&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;This is a system generated-->
+        <!--                        email&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-->
+        <!--                    </p>-->
+        <!--                </div>-->
+        <!--            </field>-->
+        <!--            <field name="report_template" ref="appscomp_pdc.action_pdc_template_report"/>-->
+        <!--            <field name="report_name">{{ (object.name or '').replace('/','_') }}</field>-->
+        <!--        </record>-->
+    </data>
+</odoo>

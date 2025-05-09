@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="activity_tracking_excel_report_wizard_form_views" model="ir.ui.view">
+        <field name="name">activity.tracking.report.wizard</field>
+        <field name="model">activity.tracking.excel.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Activity Tracking">
+                <group>
+                    <group>
+                        <field name="start_date"/>
+                        <field name="activity_user_id"/>
+                    </group>
+                    <group>
+                        <field name="end_date"/>
+                        <field name="product_attribute_value_id" options="{'no_create': True, 'no_edit': True}" context="{'brand_attribute_value': True}"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="print_xls_report" string="Download" class="oe_highlight" type="object" icon="fa-file-excel-o" />
+                    or
+                    <button string="Cancel" class="btn-default" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_activity_tracking_excel_report_wizard" model="ir.actions.act_window">
+        <field name="name">Activity Tracking</field>
+        <field name="res_model">activity.tracking.excel.report.wizard</field>
+        <field name="view_id" ref="ortholite_sales.activity_tracking_excel_report_wizard_form_views" />
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_activity_tracking_excel_report_wizard"
+        name="Activity Tracking"
+        parent="sale.menu_sale_report"
+        action="ortholite_sales.action_activity_tracking_excel_report_wizard"
+        sequence="35"
+    />
+    
+</odoo>

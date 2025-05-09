@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	 <data>
+	 	<record id="paperformat_asset_qr_code_report" model="report.paperformat">
+            <field name="name">Asset QR Code Paperformat</field>
+            <field name="default" eval="True"/>
+            <field name="format">custom</field>
+            <field name="page_height">48</field>
+            <field name="page_width">48</field>
+            <field name="orientation">Landscape</field>
+            <field name="margin_top">0</field>
+            <field name="margin_bottom">0</field>
+            <field name="margin_left">0</field>
+            <field name="margin_right">0</field>
+            <field name="disable_shrinking" eval="True"/>
+            <field name="dpi">96</field>
+        </record>
+
+        <record id="asset_qr_code_report" model="ir.actions.report">
+            <field name="name">Asset QR Code</field>
+            <field name="model">account.asset</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">ortholite_account_mrp_fields.asset_qr_code_ortholite_sales</field>
+            <field name="report_file">ortholite_account_mrp_fields.asset_qr_code_ortholite_sales</field>
+            <field name="paperformat_id" ref="ortholite_account_mrp_fields.paperformat_asset_qr_code_report"/>
+            <field name="print_report_name">('Asset QR Code - %s' % (object.name))</field>
+            <field name="binding_model_id" ref="account_asset.model_account_asset"/>
+            <field name="binding_type">report</field>
+        </record>
+
+		<template id="asset_qr_code_ortholite_sales">
+	        <t t-call="web.basic_layout">
+	            <t t-foreach="docs" t-as="o">
+	                <div class="page">
+	                    <center>
+	                        <table style="border-style: hidden;">
+	                            <tr>
+	                                <td width="20%" style="text-align: center; border-style: hidden;">
+	                                    <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" style="width:40px" alt="Company Logo"/> | <span t-field="o.acquisition_date" style="font-family: Arial; font-size: 10px"/>
+	                                </td>
+	                            </tr>
+	                            <tr>
+		                            <td style="text-align: center;border-style: hidden; font-family: Arial; font-size: 10px">
+	                                    <span t-field="o.sr_number"/>
+	                                </td>
+	                            </tr>
+	                            <tr>
+	                                <td colspan="2" style="text-align: center; padding-top:1px;">
+	                                    <img t-if="o.qr_code" t-att-src="image_data_uri(o.qr_code)" align="center" style="width:90px" alt="Asset QR Code"/>
+	                                </td>
+	                            </tr>
+	                        </table>
+	                    </center>
+	                </div>
+	            </t>
+	        </t>
+	    </template>
+
+	    <menuitem id="asset_ortholite_menu_root"
+	        name="Asset"
+	        web_icon="ortholite_account_mrp_fields,static/description/icon.png"
+	        action="account_asset.action_account_asset_form"
+	        sequence="10"
+	    />
+
+	</data>
+</odoo>

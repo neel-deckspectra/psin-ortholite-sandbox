@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="mrp_eco_view_form_praw" model="ir.ui.view">
+        <field name="name">mep.eco.view.form2.inherit.praw</field>
+        <field name="model">mrp.eco</field>
+        <field name="inherit_id" ref="mrp_plm.mrp_eco_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='tag_ids']" position="after">
+                <field name="crm_opportunity_id" />
+                <field name="contact_id" />
+                <field name="product_category_ids" widget="many2many_tags"/>
+                <field name="product_attribute_ids" widget="many2many_tags"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="mrp_eco_view_form_inherit_ortholite_inherit_ortholite_crm_plm" model="ir.ui.view">
+        <field name="name">mrp.eco.form</field>
+        <field name="model">mrp.eco</field>
+        <field name="inherit_id" ref="ortholite_account_mrp_fields.mrp_eco_view_form_inherit_ortholite" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='quantity']" position="after">
+                <field name="shipped"/>
+                <field name="size"/>
+                <field name="status"/>
+                <field name="feedback"/>
+                <field name="dispatched_date" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

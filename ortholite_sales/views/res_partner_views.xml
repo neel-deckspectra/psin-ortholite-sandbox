@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<odoo>
+    <record id="res_partner_code_list_views" model="ir.ui.view">
+        <field name="name">res.partner.code.tree</field>
+        <field name="model">res.partner.code</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="name" required="1"/>
+                <field name="code" required="1"/>
+                <field name="type" required="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_res_partner_code_list_views" model="ir.actions.act_window">
+        <field name="name">Customer/Vendor Code</field>
+        <field name="res_model">res.partner.code</field>
+        <field name='view_mode'>tree</field>
+        <field name="view_id" ref="ortholite_sales.res_partner_code_list_views" />
+        <field name="binding_model_id" ref="model_res_partner_code"/>
+    </record>
+
+    <menuitem id="menu_res_partner_code"
+        name="Customer/Vendor Code"
+        parent="contacts.res_partner_menu_config"
+        action="ortholite_sales.action_res_partner_code_list_views"
+        sequence="12"
+    />
+
+    <record id="view_partner_form_inherit_ortholite_sales_res_partner_code" model="ir.ui.view">
+        <field name="name">res.partner</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('o_address_format')]" position="after">
+                <field name="partner_code_id" required="1" options="{'no_create': True, 'no_edit': True}"/>
+                <field name="code_type" invisible="1"/>
+            </xpath>
+            <xpath expr="//page[@name='internal_notes']" position="after">
+                <page string="Documents">
+                    <group name="partner_documents">
+                        <group>
+                            <field name="customer_pan" invisible="not code_type == 'customer'" required="1"/>
+                            <field name="customer_certificate_gst" invisible="not code_type == 'customer'" required="1"/>
+                            <field name="customer_incorporation_certificate" invisible="not code_type == 'customer'" required="1"/>
+                            <field name="customer_form" invisible="not code_type == 'customer'"/>
+                            <field name="customer_brands_worked" invisible="not code_type == 'customer'"/>
+                            <field name="customer_ehs_requirements" invisible="not code_type == 'customer'"/>
+                            <field name="customer_approval_proof" invisible="not code_type == 'customer'"/>
+                            <field name="customer_financials_from_toffler" invisible="not code_type == 'customer'"/>
+                            <field name="vendor_cancelled_cheque" invisible="not code_type == 'vendor'"/>
+                            <field name="vendor_pan" invisible="not code_type == 'vendor'" required="1"/>
+                            <field name="vendor_gst" invisible="not code_type == 'vendor'" required="1"/>
+                            <field name="vendor_incorporation_certificate" invisible="not code_type == 'vendor'"/>
+                            <field name="vendor_form" invisible="not code_type == 'vendor'" required="1"/>
+                            <field name="vendor_credit_terms" invisible="not code_type == 'vendor'" required="1"/>
+                            <field name="vendor_price_list" invisible="not code_type == 'vendor'"/>
+                            <field name="vendor_ehs" invisible="not code_type == 'vendor'"/>
+                            <field name="vendor_msme_certificate" invisible="not code_type == 'vendor'"/>
+                            <field name="vendor_registration" invisible="not code_type == 'vendor'"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+    
+</odoo>

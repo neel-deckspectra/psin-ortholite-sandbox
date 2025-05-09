@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+        <record id="sale_order_tree_inherit_ortholite" model="ir.ui.view">
+            <field name="name">view.sale.order.tree.inherit.ortholite</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.sale_order_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='tag_ids']" position="attributes">
+                    <attribute name="string">Brand</attribute>
+                </xpath>
+            </field>
+        </record>
+        <record id="view_order_form_inherit_ortholite_sales" model="ir.ui.view">
+            <field name="name">sale.order.form.ortholite</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='order_line']//tree//field[@name='price_unit']" position="attributes">
+                    <attribute name="readonly">not is_change_unit_price</attribute>
+                </xpath>
+                <xpath expr="//field[@name='order_line']//tree//field[@name='price_unit']" position="after">
+                    <field name="is_change_unit_price" invisible="1"/>
+                </xpath>
+            </field>
+        </record>
+        <record model="ir.actions.server" id="server_action_done_mo">
+            <field name="name">Mark as Done (Manufacturing and Delivery)</field>
+            <field name="model_id" ref="model_sale_order"/>
+            <field name="binding_model_id" ref="sale.model_sale_order" />
+            <field name="state">code</field>
+            <field name="code">
+                if records:
+                    records.action_done_mo()
+            </field>
+        </record>
+    </data>
+</odoo>

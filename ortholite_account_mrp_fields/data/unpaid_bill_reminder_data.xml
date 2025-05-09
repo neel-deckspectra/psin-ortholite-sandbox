@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="unpaid_bill_reminder_cron" model="ir.cron">
+        <field name="name">Vendor'a Payment Due Alerts</field>
+        <field name="model_id" ref="account.model_account_move"/>
+        <field name="state">code</field>
+        <field name="code">model.action_unpaid_bill_reminder()</field>
+        <field name='interval_number'>1</field>
+        <field name='interval_type'>weeks</field>
+        <field name="nextcall">2025-04-14 02:30:00</field>
+        <field name="numbercall">-1</field>
+        <field name="doall" eval="False"/>
+        <field name="active" eval="True"/>
+    </record>
+
+    <record id="email_template_vendor_payment_due_alerts" model="mail.template">
+        <field name="name">Bills: Send Vendor'a Payment Due Alerts</field>
+        <field name="model_id" ref="account.model_account_move"/>
+        <field name="subject">Vendor Due Payment Alerts</field>
+        <field name="body_html">
+            <![CDATA[
+                <p>Please find the attachment of the vendor due payment.</p><br/>
+            ]]>
+        </field>
+        <field name="lang">{{ object.partner_id.lang }}</field>
+        <field name="auto_delete" eval="True"/>
+    </record>
+</odoo>

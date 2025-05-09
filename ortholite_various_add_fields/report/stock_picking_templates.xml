@@ -1,0 +1,186 @@
+<odoo>
+    <data>
+
+    <!-- Delivery Slip -->
+    <template id="report_delivery_document_ortholite" inherit_id="stock.report_delivery_document">
+        <xpath expr="//div[hasclass('page')]/h2" position="after">
+            <t t-if="o.picking_type_code == 'incoming' and o.grn_sequence">
+                <h2>
+                    <span t-field="o.grn_sequence"/>
+                </h2>
+            </t>
+        </xpath>
+        <xpath expr="//th[@name='th_sm_product']" position="after">
+            <th name="th_sm_product_categ">
+                <strong>Product Category</strong>
+            </th>
+        </xpath>
+        <xpath expr="//tbody/tr/td" position="after">
+            <td name="td_product_categ">
+                <span t-field="move.product_categ_id"/>
+            </td>
+        </xpath>
+        <xpath expr="//th[@name='th_sml_product']" position="after">
+            <th name="th_sml_product_categ">
+                <strong>Product Category</strong>
+            </th>
+        </xpath>
+        <xpath expr="//table[@name='stock_move_line_table']" position="after">
+            <t t-set="total_qty" t-value="0"/>
+            <t t-foreach="o.move_ids" t-as="line">
+                <t t-set="total_qty" t-value="total_qty + line.quantity"/>
+            </t>
+            <div class="row">
+                <div class="col-9">
+                </div>
+                <div class="col-3">
+                    <strong>Sub Total Quantity:  </strong><t t-esc="round(total_qty, 2)"/>
+                </div>
+            </div>
+        </xpath>
+        <xpath expr="//div[@name='div_sched_date']" position="after">
+            <div  class="col-auto"  name="div_ortholite_delivery_type">
+                <strong>Delivery Type:</strong> <p t-field="o.ortholite_delivery_type"/>
+            </div>
+        </xpath>
+        <xpath expr="//div[@name='signature']" position="after">
+            <br/>
+            <div class="row">
+                <div class="col-4 text-center">
+                    <t t-if="o.create_uid.id != 1">
+                        <span t-field="o.create_uid"/>
+                    </t>
+                </div>
+                <div class="col-4 text-center">
+                </div>
+                <div class="col-4 text-center">
+                    <t t-esc="o.get_datetime()"/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4 text-center">
+                    <strong>----------------------------------------</strong>
+                </div>
+                <div class="col-4 text-center">
+                    <strong>----------------------------------------</strong>
+                </div>
+                <div class="col-4 text-center">
+                    <strong>----------------------------------------</strong>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4 text-center">
+                    <strong>Prepared by</strong>
+                </div>
+                <div class="col-4 text-center">
+                    <strong> Authorised by</strong>
+                </div>
+                <div class="col-4 text-center">
+                    <strong> Current Date / Time</strong>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="stock_report_delivery_aggregated_move_lines_ortholite" inherit_id="stock.stock_report_delivery_aggregated_move_lines">
+        <xpath expr="//tr[@t-foreach='aggregated_lines']/td" position="after">
+            <td name="td_sml_product_categ" class="text-center">
+                <span t-out="aggregated_lines[line]['product'].categ_id.display_name"/>
+            </td>
+        </xpath>
+    </template>
+
+    <template id="stock_report_delivery_has_serial_move_line_inherit" inherit_id="stock.stock_report_delivery_has_serial_move_line">
+        <xpath expr="//td" position="after">
+            <td>
+                <span t-field="move_line.move_id.product_categ_id"/>
+            </td>
+        </xpath>
+    </template>
+
+    <!-- Picking Operations -->
+    <template id="report_picking_ortholite" inherit_id="stock.report_picking">
+        <xpath expr="//th[@name='th_product']" position="after">
+            <th name="th_product_categ">
+                <strong>Product Category</strong>
+            </th>
+        </xpath>
+        <xpath expr="//tbody/tr/td" position="after">
+            <td name="td_product_categ">
+                <span t-field="ml.move_id.product_categ_id"/>
+            </td>
+        </xpath>
+        <xpath expr="//td[@t-if='has_serial_number']" position="attributes">
+            <attribute name="class" add="w-25" separator=" "/>
+        </xpath>
+        <xpath expr="//div[hasclass('page')]/table[2]" position="after">
+            <t t-set="total_qty" t-value="0"/>
+            <t t-foreach="o.move_line_ids_without_package" t-as="line">
+                <t t-set="total_qty" t-value="total_qty + line.quantity"/>
+            </t>
+            <div class="row">
+                <div class="col-9">
+                </div>
+                <div class="col-3">
+                    <strong>Sub Total Quantity:  </strong><t t-esc="round(total_qty, 2)"/>
+                </div>
+            </div>
+            <br/>
+            <div class="row">
+                <div class="col-4 text-center">
+                    <t t-if="o.create_uid.id != 1">
+                        <span t-field="o.create_uid.name"/>
+                    </t>
+                </div>
+                <div class="col-4 text-center">
+                </div>
+                <div class="col-4 text-center">
+                    <t t-esc="o.get_datetime()"/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4 text-center">
+                    <strong>----------------------------------------</strong>
+                </div>
+                <div class="col-4 text-center">
+                    <strong>----------------------------------------</strong>
+                </div>
+                <div class="col-4 text-center">
+                    <strong>----------------------------------------</strong>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-4 text-center">
+                    <strong>Prepared by</strong>
+                </div>
+                <div class="col-4 text-center">
+                    <strong> Authorised by</strong>
+                </div>
+                <div class="col-4 text-center">
+                    <strong> Current Date / Time</strong>
+                </div>
+            </div>
+        </xpath>
+        <xpath expr="//div[@name='div_sched_date']" position="after">
+            <div  class="col-auto"  name="div_ortholite_delivery_type">
+                <strong>Delivery Type:</strong> <p t-field="o.ortholite_delivery_type"/>
+            </div>
+        </xpath>
+    </template>
+
+    <!-- Package -->
+    <template id="report_package_barcode_ortholite" inherit_id="stock.report_package_barcode">
+        <xpath expr="//thead/tr/th" position="after">
+            <th name="th_product_categ">
+                <strong>Product Category</strong>
+            </th>
+        </xpath>
+        <xpath expr="//tbody/tr/td" position="after">
+            <td name="td_product_categ">
+                <span t-field="l.product_id.categ_id"/>
+            </td>
+        </xpath>
+    </template>
+
+    </data>
+</odoo>

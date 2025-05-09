@@ -1,0 +1,469 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="approval_category_view_form_inherit_ds_ortholite_approvals" model="ir.ui.view">
+        <field name="name">approval.category.view.form</field>
+        <field name="model">approval.category</field>
+        <field name="inherit_id" ref="approvals.approval_category_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//notebook/page/group/group[@name='option_settings']" position="attributes">
+                <attribute name="invisible">approval_type in ['bom', 'product', 'customer']</attribute>
+            </xpath>
+        </field>
+    </record>
+    <record id="approval_request_view_form_inherit_ds_ortholite_approval" model="ir.ui.view">
+        <field name="name">approval.request.view.form</field>
+        <field name="model">approval.request</field>
+        <field name="inherit_id" ref="approvals.approval_request_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='date_confirmed']" position="after">
+                <field name="bom_id" invisible="approval_type != 'bom'" readonly="1" options="{'no_create': True, 'no_create_edit':True, 'no_open': True}"/>
+                <field name="template_id" readonly="1" options="{'no_create': True, 'no_create_edit':True, 'no_open': True}" invisible="approval_type != 'product'"/>
+                <field name="categ_id" options="{'no_create': True, 'no_create_edit':True, 'no_open': True}" invisible="approval_type != 'product'" readonly="1"/>
+            </xpath>
+            <xpath expr="//field[@name='name']" position="attributes">
+                <attribute name="readonly">1</attribute>
+            </xpath>
+        </field>
+    </record>
+    <record id="approval_category_view_kanban_inherit_ds_ortholite_approval" model="ir.ui.view">
+        <field name="name">approval.category.views.kanban</field>
+        <field name="model">approval.category</field>
+        <field name="inherit_id" ref="approvals.approval_category_view_kanban" />
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='create_request']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
+    <record id="mrp_bom_form_view_inherit_ds_ortholite_approvals" model="ir.ui.view">
+        <field name="name">mrp.bom.form</field>
+        <field name="model">mrp.bom</field>
+        <field name="inherit_id" ref="mrp.mrp_bom_form_view" />
+        <field name="arch" type="xml">
+            <xpath expr="//form//sheet" position="before">
+                <header>
+                    <field name="request_status" widget="statusbar" invisible="'request_status' == False or approval_active == False"/>
+                    <field name="approval_active" invisible="1" />
+                    <field name="user_status" invisible="1" />
+                    <field name="has_access_to_request" invisible="1" />
+                    <button name="approval_action_confirm" string="Submit" type="object" invisible="request_status != 'new' or approval_active == False" class="btn-primary" data-hotkey="v" />
+                    <button name="approval_action_approve" string="Approve" type="object" invisible="user_status != 'pending' or approval_active == False" data-hotkey="q"/>
+                    <button name="approval_action_refuse" string="Refuse" type="object" invisible="user_status != 'pending' or approval_active  == False" data-hotkey="x" />
+                    <button name="approval_action_withdraw" string="Withdraw" type="object" invisible="request_status == 'new' or user_status in ['pending', 'cancel'] or user_status == False or approval_active == False" data-hotkey="y" />
+                    <button name="approval_action_draft" string="Back To Draft" type="object" invisible="request_status != 'cancel' or approval_active == False and user_status == False or has_access_to_request == False" data-hotkey="w" />
+                    <button name="approval_action_cancel" string="Cancel" type="object" invisible="request_status in ['new', 'cancel'] or approval_active == False and user_status == False or has_access_to_request == False" data-hotkey="z" />
+                </header>
+            </xpath>
+            <xpath expr="//field[@name='product_id']" position="attributes">
+                <attribute name="domain">[('company_id', 'in', [False, company_id]),('request_status', '=', 'approved'),('product_tmpl_id', '=', product_tmpl_id), ('is_fg_product', '=', True)]</attribute>
+                <attribute name="readonly">user_status == 'approved'</attribute>
+                <attribute name="options">{'no_create': True, 'no_edit': True,'no_open': True}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='product_tmpl_id']" position="attributes">
+                <attribute name="domain">[('company_id', 'in', [False, company_id]),('request_status', '=', 'approved'),('type', 'in', ['product', 'consu']), ('is_fg_product', '=', True)]</attribute>
+                <attribute name="readonly">user_status == 'approved'</attribute>
+                <attribute name="options">{'no_create': True, 'no_edit': True,'no_open': True}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='type']" position="attributes">
+                <attribute name="readonly">user_status == 'approved'</attribute>
+            </xpath>
+            <xpath expr="//field[@name='bom_line_ids']" position="attributes">
+                <attribute name="readonly">user_status == 'approved'</attribute>
+            </xpath>
+            <xpath expr="//field[@name='bom_line_ids']//tree//field[@name='product_id']" position="attributes">
+                <attribute name="options">{'no_create': True, 'no_edit': True,'no_open': True}</attribute>
+                <attribute name="domain">[('categ_id', '=', product_categ_id),('request_status', '=', 'approved')]</attribute>
+            </xpath>
+            <xpath expr="//field[@name='bom_line_ids']//tree//field[@name='product_categ_id']" position="attributes">
+                <attribute name="options">{'no_create': True, 'no_edit': True,'no_open': True}</attribute>
+            </xpath>
+        </field>
+    </record>
+    <record id="product_template_form_view_inherit_ds_ortholite_approvals" model="ir.ui.view">
+        <field name="name">product.template.form</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view" />
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <field name="request_status" widget="statusbar" invisible="'request_status' == False or approval_active == False"/>
+                <field name="approval_active" invisible="1" />
+                <field name="user_status" invisible="1" />
+                <field name="has_access_to_request" invisible="1" />
+                <button name="approval_action_confirm" string="Submit" type="object" invisible="request_status != 'new' or approval_active == False" class="btn-primary" data-hotkey="v" />
+                <button name="approval_action_approve" string="Approve" type="object" invisible="user_status != 'pending' or approval_active == False" data-hotkey="q"/>
+                <button name="approval_action_refuse" string="Refuse" type="object" invisible="user_status != 'pending' or approval_active  == False" data-hotkey="x" />
+                <button name="approval_action_withdraw" string="Withdraw" type="object" invisible="request_status == 'new' or user_status in ['pending', 'cancel'] or user_status == False or approval_active == False" data-hotkey="y" />
+                <button name="approval_action_draft" string="Back To Draft" type="object" invisible="request_status != 'cancel' or approval_active == False and user_status == False or has_access_to_request == False" data-hotkey="w" />
+                <button name="approval_action_cancel" string="Cancel" type="object" invisible="request_status in ['new', 'cancel'] or approval_active == False and user_status == False or has_access_to_request == False" data-hotkey="z" />
+            </xpath>
+            <xpath expr="//field[@name='name']" position="attributes">
+                <attribute name="readonly">user_status == 'approved'</attribute>
+            </xpath>
+            <xpath expr="//field[@name='detailed_type']" position="attributes">
+                <attribute name="readonly">user_status == 'approved'</attribute>
+            </xpath>
+            <xpath expr="//field[@name='invoice_policy']" position="attributes">
+                <attribute name="readonly">user_status == 'approved'</attribute>
+            </xpath>
+            <xpath expr="//field[@name='uom_id']" position="attributes">
+                <attribute name="readonly">user_status == 'approved'</attribute>
+            </xpath>
+            <xpath expr="//field[@name='uom_po_id']" position="attributes">
+                <attribute name="readonly">user_status == 'approved'</attribute>
+            </xpath>
+            <xpath expr="//field[@name='categ_id']" position="attributes">
+                <attribute name="readonly">user_status == 'approved'</attribute>
+            </xpath>
+            <xpath expr="//field[@name='l10n_in_hsn_code']" position="attributes">
+                <attribute name="readonly">user_status == 'approved'</attribute>
+            </xpath>
+            <xpath expr="//field[@name='route_ids']" position="attributes">
+                <attribute name="readonly">user_status == 'approved'</attribute>
+            </xpath>
+            <xpath expr="//field[@name='sale_ok']" position="attributes">
+                <attribute name="readonly">user_status == 'approved'</attribute>
+            </xpath>
+            <xpath expr="//field[@name='purchase_ok']" position="attributes">
+                <attribute name="readonly">user_status == 'approved'</attribute>
+            </xpath>
+            <xpath expr="//field[@name='can_be_expensed']" position="attributes">
+                <attribute name="readonly">user_status == 'approved'</attribute>
+            </xpath>
+            <xpath expr="//field[@name='tracking']" position="attributes">
+                <attribute name="readonly">user_status == 'approved'</attribute>
+            </xpath>
+        </field>
+    </record>
+    <record id="product_template_only_form_view_inherit_user_status_readonly" model="ir.ui.view">
+        <field name="name">product.template.form</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='barcode']" position="attributes">
+                <attribute name="readonly">user_status == 'approved'</attribute>
+            </xpath>
+        </field>
+    </record>
+    <record id="approval_request_view_form_inherit_ds_ortholite_approvals" model="ir.ui.view">
+        <field name="name">sale.order.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="attributes">
+                <attribute name="domain">[('company_id', 'in', (False, company_id)),('request_status', '=', 'approved')]</attribute>
+                <attribute name="options">{'no_create': True, 'no_edit': True,'no_open': True}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='order_line']//tree//field[@name='product_id']" position="attributes">
+                <attribute name="domain">[('sale_ok', '=', True),('request_status', '=', 'approved')]</attribute>
+                <attribute name="options">{'no_create': True, 'no_edit': True,'no_open': True}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='order_line']//tree//field[@name='product_template_id']" position="attributes">
+                <attribute name="domain">[('sale_ok', '=', True),('request_status', '=', 'approved')]</attribute>
+                <attribute name="options">{'no_create': True, 'no_edit': True,'no_open': True}</attribute>
+            </xpath>
+        </field>
+    </record>
+    <record id="sale_order_form_quote_inherit_ds_ortholite_approvals" model="ir.ui.view">
+        <field name="name">sale.order.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale_management.sale_order_form_quote"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='sale_order_option_ids']//tree//field[@name='product_id']" position="attributes">
+                <attribute name="domain">[('request_status', '=', 'approved'), ('sale_ok', '=', True), '|', ('company_id', '=', False), ('company_id', '=', parent.company_id)]</attribute>
+                <attribute name="options">{'no_create': True, 'no_edit': True,'no_open': True}</attribute>
+            </xpath>
+        </field>
+    </record>
+    <record id="purchase_order_form_inherit_ds_ortholite_approvals" model="ir.ui.view">
+        <field name="name">purchase.order.form</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="attributes">
+                <attribute name="domain">[('company_id', 'in', (False, company_id)),('request_status', '=', 'approved')]</attribute>
+                <attribute name="options">{'no_create': True, 'no_edit': True,'no_open': True}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='order_line']//tree//field[@name='product_template_id']" position="attributes">
+                <attribute name="domain">[('purchase_ok', '=', True),('request_status', '=', 'approved')]</attribute>
+                <attribute name="options">{'no_create': True, 'no_edit': True,'no_open': True}</attribute>
+            </xpath>
+        </field>
+    </record>
+    <record id="view_move_form_inherit_ds_ortholite_approvals" model="ir.ui.view">
+        <field name="name">account.move.form</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="attributes">
+                <attribute name="domain">[('company_id', 'in', (False, company_id)),('request_status', '=', 'approved')]</attribute>
+            </xpath>
+            <xpath expr="//field[@name='invoice_line_ids']//tree//field[@name='product_id']" position="attributes">
+                <attribute name="context">{'is_only_approval': True}</attribute>
+                <attribute name="options">{'no_create': True, 'no_edit': True,'no_open': True}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='line_ids']//tree//field[@name='partner_id']" position="attributes">
+                <attribute name="domain">[('request_status', '=', 'approved'),'|', ('parent_id', '=', False), ('is_company', '=', True)]</attribute>
+                <attribute name="options">{'no_create': True, 'no_edit': True,'no_open': True}</attribute>
+            </xpath>
+        </field>
+    </record>
+    <record id="view_account_payment_form_inherit_ds_ortholite_approvals" model="ir.ui.view">
+        <field name="name">account.payment.form</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id'][1]" position="attributes">
+                <attribute name="domain">[('company_id', 'in', (False, company_id)),('request_status', '=', 'approved'),'|',('is_company', '=', True),('parent_id', '=', False)]</attribute>
+            </xpath>
+            <xpath expr="//field[@name='partner_id'][2]" position="attributes">
+                <attribute name="domain">[('company_id', 'in', (False, company_id)),('request_status', '=', 'approved'),'|',('is_company', '=', True),('parent_id', '=', False)]</attribute>
+            </xpath>
+        </field>
+    </record>
+    <record id="view_picking_form_inherit_ds_ortholite_approvals" model="ir.ui.view">
+        <field name="name">stock.picking.form</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="attributes">
+                <attribute name="domain">[('company_id', 'in', (False, company_id)),('request_status', '=', 'approved')]</attribute>
+                <attribute name="options">{'no_create': True, 'no_edit': True,'no_open': True}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='move_ids_without_package']//tree//field[@name='product_id']" position="attributes">
+                <attribute name="context">{'default_detailed_type': 'product','is_only_approval': True}</attribute>
+                <attribute name="options">{'no_create': True, 'no_edit': True,'no_open': True}</attribute>
+            </xpath>
+        </field>
+    </record>
+    <record id="mrp_production_form_view_inherit_ds_ortholite_approvals" model="ir.ui.view">
+        <field name="name">mrp.production.form</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='product_id']" position="attributes">
+                <attribute name="domain">[('type', 'in', ('product', 'consu')),('company_id', 'in', (False, company_id)),('request_status', '=', 'approved')]</attribute>
+                <attribute name="options">{'no_create': True, 'no_edit': True,'no_open': True}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='bom_id']" position="attributes">
+                <attribute name="options">{'no_create': True, 'no_edit': True,'no_open': True}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='move_raw_ids']//tree//field[@name='product_id']" position="attributes">
+                <attribute name="domain">[('type', 'in', ('product', 'consu')),('id', '!=', parent.product_id),('request_status', '=', 'approved')]</attribute>
+                <attribute name="options">{'no_create': True, 'no_edit': True,'no_open': True}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='move_raw_ids']//tree//field[@name='product_categ_id']" position="attributes">
+                <attribute name="options">{'no_create': True, 'no_edit': True,'no_open': True}</attribute>
+            </xpath>
+        </field>
+    </record>
+    <record id="view_stock_quant_tree_inventory_editable_inherit_ds_ortholite_approvals" model="ir.ui.view">
+        <field name="name">stock.quant.tree</field>
+        <field name="model">stock.quant</field>
+        <field name="inherit_id" ref="stock.view_stock_quant_tree_inventory_editable"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='product_id']" position="attributes">
+                <attribute name="context">{'is_only_approval': True}</attribute>
+            </xpath>
+        </field>
+    </record>
+    <record id="stock_scrap_form_view_inherit_ds_ortholite_approvals" model="ir.ui.view">
+        <field name="name">stock.scrap.form</field>
+        <field name="model">stock.scrap</field>
+        <field name="inherit_id" ref="stock.stock_scrap_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='product_id']" position="attributes">
+                <attribute name="context">{'default_detailed_type': 'product','is_only_approval': True}</attribute>
+            </xpath>
+        </field>
+    </record>
+    <record id="view_stock_landed_cost_form_inherit_ds_ortholite_approvals" model="ir.ui.view">
+        <field name="name">stock.landed.cost.form</field>
+        <field name="model">stock.landed.cost</field>
+        <field name="inherit_id" ref="stock_landed_costs.view_stock_landed_cost_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='cost_lines']//tree//field[@name='product_id']" position="attributes">
+                <attribute name="domain">[('landed_cost_ok', '=', True),('request_status', '=', 'approved')]</attribute>
+            </xpath>
+        </field>
+    </record>
+    <record id="view_production_lot_form_inherit_ds_ortholite_approvals" model="ir.ui.view">
+        <field name="name">stock.lot.form</field>
+        <field name="model">stock.lot</field>
+        <field name="inherit_id" ref="stock.view_production_lot_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='product_id']" position="attributes">
+                <attribute name="context">{'default_detailed_type': 'product', 'default_tracking': 'lot', 'is_only_approval': True}</attribute>
+            </xpath>
+        </field>
+    </record>
+    <record id="mrp_unbuild_form_view_inherit_ds_ortholite_approvals" model="ir.ui.view">
+        <field name="name">mrp.unbuild.form</field>
+        <field name="model">mrp.unbuild</field>
+        <field name="inherit_id" ref="mrp.mrp_unbuild_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='product_id']" position="attributes">
+                <attribute name="context">{'is_only_approval': True}</attribute>
+            </xpath>
+        </field>
+    </record>
+    <record id="mrp_routing_workcenter_form_view_inherit_ds_ortholite_approvals" model="ir.ui.view">
+        <field name="name">mrp.routing.workcenter.form</field>
+        <field name="model">mrp.routing.workcenter</field>
+        <field name="inherit_id" ref="mrp.mrp_routing_workcenter_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='bom_id']" position="attributes">
+                <attribute name="domain">[('request_status', '=', 'approved')]</attribute>
+            </xpath>
+        </field>
+    </record>
+    <record id="quality_point_view_form_inherit_ds_ortholite_approvals" model="ir.ui.view">
+        <field name="name">quality.point.form</field>
+        <field name="model">quality.point</field>
+        <field name="inherit_id" ref="quality.quality_point_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='product_ids']" position="attributes">
+                <attribute name="context">{'is_only_approval': True}</attribute>
+                <attribute name="options">{'no_create': True, 'no_edit': True,'no_open': True}</attribute>
+            </xpath>
+        </field>
+    </record>
+    <record id="quality_check_view_form_inherit_ds_ortholite_approvals" model="ir.ui.view">
+        <field name="name">quality.check.form</field>
+        <field name="model">quality.check</field>
+        <field name="inherit_id" ref="quality_control.quality_check_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='product_id']" position="attributes">
+                <attribute name="context">{'is_only_approval': True}</attribute>
+                <attribute name="options">{'no_create': True, 'no_edit': True,'no_open': True}</attribute>
+            </xpath>
+        </field>
+    </record>
+    <record id="quality_alert_view_form_inherit_ds_ortholite_approvals" model="ir.ui.view">
+        <field name="name">quality.alert.form</field>
+        <field name="model">quality.alert</field>
+        <field name="inherit_id" ref="quality_control.quality_alert_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='product_tmpl_id']" position="attributes">
+                <attribute name="context">{'is_only_approval': True}</attribute>
+                <attribute name="options">{'no_create': True, 'no_edit': True,'no_open': True}</attribute>
+            </xpath>
+            <xpath expr="//group/group/field[@name='product_id']" position="attributes">
+                <attribute name="context">{'is_only_approval': True}</attribute>
+                <attribute name="options">{'no_create': True, 'no_edit': True,'no_open': True}</attribute>
+            </xpath>
+        </field>
+    </record>
+    <record id="defect_entry_tree_views_inherit_ds_ortholite_approvals" model="ir.ui.view">
+        <field name="name">defect.entry.tree</field>
+        <field name="model">defect.entry</field>
+        <field name="inherit_id" ref="ortholite_various_add_fields.defect_entry_tree_views"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='product_id']" position="attributes">
+                <attribute name="domain">[('request_status', '=', 'approved')]</attribute>
+            </xpath>
+        </field>
+    </record>
+    <record id="view_partner_form_inherit_ds_ortholite_approvals" model="ir.ui.view">
+        <field name="name">res.partner.form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='category_id']" position="after">
+                <field name="user_status" invisible="1"/>
+                <field name="is_country_india" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@id='company']" position="attributes">
+                <attribute name="readonly">user_status == 'approved'</attribute>
+            </xpath>
+            <xpath expr="//field[@id='individual']" position="attributes">
+                <attribute name="readonly">user_status == 'approved'</attribute>
+            </xpath>
+            <xpath expr="//field[@name='l10n_in_pan']" position="attributes">
+                <attribute name="readonly">user_status == 'approved'</attribute>
+            </xpath>
+            <xpath expr="//field[@name='vat']" position="attributes">
+                <attribute name="readonly">user_status == 'approved'</attribute>
+            </xpath>
+            <xpath expr="//field[@name='l10n_in_gst_treatment']" position="attributes">
+                <attribute name="readonly">user_status == 'approved'</attribute>
+            </xpath>
+            <xpath expr="//field[@name='street']" position="attributes">
+                <attribute name="readonly">user_status == 'approved'</attribute>
+            </xpath>
+            <xpath expr="//field[@name='street2']" position="attributes">
+                <attribute name="readonly">user_status == 'approved'</attribute>
+            </xpath>
+            <xpath expr="//field[@name='city']" position="attributes">
+                <attribute name="readonly">user_status == 'approved'</attribute>
+            </xpath>
+            <xpath expr="//field[@name='state_id']" position="attributes">
+                <attribute name="readonly">user_status == 'approved'</attribute>
+            </xpath>
+            <xpath expr="//field[@name='zip']" position="attributes">
+                <attribute name="readonly">user_status == 'approved'</attribute>
+            </xpath>
+            <xpath expr="//field[@name='country_id']" position="attributes">
+                <attribute name="readonly">user_status == 'approved'</attribute>
+            </xpath>
+            <xpath expr="//field[@name='parent_id']" position="attributes">
+                <attribute name="readonly">user_status == 'approved'</attribute>
+            </xpath>
+            <xpath expr="//field[@name='mobile']" position="attributes">
+                <attribute name="required">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='email']" position="attributes">
+                <attribute name="required">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='vat']" position="attributes">
+                <attribute name="required">1</attribute>
+                <attribute name="required">is_country_india</attribute>
+            </xpath>
+        </field>
+    </record>
+    <record id="crm_lead_view_form_inherit_ds_ortholite_approvals" model="ir.ui.view">
+        <field name="name">crm.lead.form</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='lead_partner']//field[@name='partner_id']" position="attributes">
+                <attribute name="domain">['|',('company_id', 'in', (False, company_id)),('company_id', 'parent_of', company_id), ('request_status', '=', 'approved')]</attribute>
+            </xpath>
+            <xpath expr="//group[@name='opportunity_partner']//field[@name='partner_id']" position="attributes">
+                <attribute name="domain">['|',('company_id', 'in', (False, company_id)),('company_id', 'parent_of', company_id), ('request_status', '=', 'approved')]</attribute>
+            </xpath>
+        </field>
+    </record>
+    <record id="quick_create_opportunity_form_inehrit_ds_ortholite_approvals" model="ir.ui.view">
+        <field name="name">crm.lead.quick_create</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.quick_create_opportunity_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="attributes">
+                <attribute name="domain">['|',('company_id', 'in', (False, company_id)),('company_id', 'parent_of', company_id), ('request_status', '=', 'approved')]</attribute>
+            </xpath>
+        </field>
+    </record>
+    <record id="crm_lead_view_form_inherit_ortholite_inherit_ds_ortholite_approvals" model="ir.ui.view">
+        <field name="name">crm.lead.form</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="ortholite_sales.crm_lead_view_form_inherit_ortholite"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='lead_line_ids']//tree//field[@name='product_id']" position="attributes">
+                <attribute name="domain">[('request_status', '=', 'approved')]</attribute>
+            </xpath>
+        </field>
+    </record>
+    <record id="mrp_eco_view_form_inherit_ds_ortholite_approvals" model="ir.ui.view">
+        <field name="name">mrp.eco.form</field>
+        <field name="model">mrp.eco</field>
+        <field name="inherit_id" ref="mrp_plm.mrp_eco_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='product_tmpl_id']" position="attributes">
+                <attribute name="options">{'no_create': True, 'no_edit': True,'no_open': True}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='bom_id']" position="attributes">
+                <attribute name="options">{'no_create': True, 'no_edit': True,'no_open': True}</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<odoo>
+
+    <record id="view_order_form_inherit_ortholite" model="ir.ui.view">
+        <field name="name">view.order.form.inherit.ortholite</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='order_lines']/field[@name='order_line']/tree/field[@name='product_uom_qty']" position="after">
+                <field name="product_categ_id"/>
+            </xpath>
+            <xpath expr="//field[@name='payment_term_id']" position="after">
+                <field name="employee_id" options="{'no_quick_create': True, 'no_create_edit': True}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_order_tree_inherit_ortholite_various_add_fields" model="ir.ui.view">
+        <field name="name">sale.order.tree</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='user_id']" position="after">
+                <field name="employee_id"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_quotation_tree_with_onboarding_inherit_ortholite_various_add_fields" model="ir.ui.view">
+        <field name="name">sale.order.tree</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_quotation_tree_with_onboarding"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='user_id']" position="after">
+                <field name="employee_id"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

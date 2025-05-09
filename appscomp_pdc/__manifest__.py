@@ -1,0 +1,36 @@
+{
+     'name': "Post Dated Cheque Management",
+    'version': "17.0",
+    'author': "AppsComp Widgets Pvt Ltd",
+    "live_test_url": "https://www.youtube.com/watch?v=Lbpuf1MSRYY",
+    'category': "Accounting",
+    'summary': 'It is a standard banking practice in some countries to request post-dated checks'
+               'for the retail Loan repayments. Optimize your financial management with Odoo'
+               'Post Dated Cheque Management.',
+    'license': 'LGPL-3',
+    'website': 'https://www.appscomp.com',
+   'images': ['static/description/banner.png'],
+    'data': [
+        'security/ir.model.access.csv',
+        'data/data.xml',
+        'report/template_cheque_report.xml',
+        'report/pdc_cheque_report_menu.xml',
+        'report/Pdc_payment_report_menu.xml',
+        'report/template_wizard_payment_report.xml',
+        'views/account_payment_view.xml',
+        'views/pdc_cheque_view.xml',
+        'views/account_payment_view.xml',
+        'views/res_config_view.xml',
+        # 'views/account_journal.xml',
+        'views/account_payment.xml',
+        'wizard/payment_pdc_report.xml',
+    ],
+    'demo': [],
+    'depends': ['base', 'account', 'account_check_printing'],
+    'installable': True,
+    'application': True,
+    'license': 'OPL-1',
+    'price': 33,
+    'currency': 'EUR',
+    'support': 'hello@appscomp.com'
+}

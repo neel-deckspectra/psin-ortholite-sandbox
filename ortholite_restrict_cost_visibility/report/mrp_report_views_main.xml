@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+    <data>
+        <record id="mrp.action_report_bom_structure" model="ir.actions.report">
+            <field name="groups_id" eval="[(4, ref('ortholite_restrict_cost_visibility.group_cost_visibility'))]"/>
+        </record>
+    </data>
+
+</odoo>

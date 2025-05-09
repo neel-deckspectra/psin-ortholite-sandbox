@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates>
+    <t t-name="gl_foreign_currency.search_template_currency">
+        <Dropdown togglerClass="'btn btn-secondary'">
+            <t t-set-slot="toggler">
+                <i class="fa fa-book me-1"/>Currency:
+                <t t-foreach="controller.options.currenciess" t-as="currency" t-key="currency_name_index">
+                    <t t-if="currency.selected">
+                        <t t-esc="currency.name"/>
+                    </t>
+                </t>
+            </t>
+
+            <t t-foreach="controller.options.currenciess" t-as="currency" t-key="currency_index">
+                <DropdownItem
+                            class="{ 'selected': currency.selected }"
+                            onSelected="() => this.filterCurrency(currency, controller.options.currenciess)"
+                    >
+                        <t t-esc="currency.name"/>
+                    </DropdownItem>
+            </t>
+        </Dropdown>
+    </t>
+</templates>

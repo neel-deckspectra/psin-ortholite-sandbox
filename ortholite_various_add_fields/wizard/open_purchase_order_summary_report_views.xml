@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="open_purchase_order_summary_report_wizard_form_views" model="ir.ui.view">
+        <field name="name">open.purchase.order.summary.report.wizard</field>
+        <field name="model">open.purchase.order.summary.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Open Order Summary">
+                <group>
+                    <group>
+                        <field name="start_date" options="{'no_create': True, 'no_edit': True}"/>
+                        <field name="product_attribute_value_id" options="{'no_create': True, 'no_edit': True}" context="{'is_brand_attribute_value': True}"/>
+                    </group>
+                    <group>
+                        <field name="end_date"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="print_xls_report" string="Download" class="oe_highlight" type="object" icon="fa-file-excel-o" />
+                    or
+                    <button string="Cancel" class="btn-default" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_open_purchase_order_summary_report_wizard" model="ir.actions.act_window">
+        <field name="name">Open Order Summary</field>
+        <field name="res_model">open.purchase.order.summary.report.wizard</field>
+        <field name="view_id" ref="ortholite_various_add_fields.open_purchase_order_summary_report_wizard_form_views" />
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_open_purchase_order_summary_report_wizard"
+        name="Open Order Summary"
+        parent="purchase.purchase_report_main"
+        action="ortholite_various_add_fields.action_open_purchase_order_summary_report_wizard"
+        sequence="200"
+    />
+    
+</odoo>

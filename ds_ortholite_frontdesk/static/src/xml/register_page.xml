@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates xml:space="preserve">
+    <t t-name="ds_ortholite_frontdesk.RegisterPage" t-inherit="frontdesk.RegisterPage" t-inherit-mode="extension">
+        <xpath expr="//div[@t-if='!props.isMobile']" position="replace">
+            <div t-if="!props.isMobile" class="col-lg-6 d-flex justify-content-center gap-2 mx-lg-auto mt-auto">
+                <button class="btn btn-lg px-4" t-att-class="props.theme === 'light' ? 'bg-200' : 'bg-700'" t-on-click="props.onClose">Close</button>
+                <button class="btn btn-lg px-4" t-att-class="props.theme === 'light' ? 'bg-200' : 'bg-700'" t-on-click="props.checkOut">Check Out</button>
+            </div>
+        </xpath>
+    </t>
+</templates>

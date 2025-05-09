@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <odoo>
+
+        <record id="mrp_workcenter_view_inherit_ortholite" model="ir.ui.view">
+            <field name="name">mrp.workcenter.form.inherit.ortholite</field>
+            <field name="model">mrp.workcenter</field>
+            <field name="inherit_id" ref="mrp.mrp_workcenter_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='costs_hour']" position="attributes">
+                    <attribute name="groups">ortholite_restrict_cost_visibility.group_cost_visibility</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="mrp_workcenter_form_view_inherit_ortholite" model="ir.ui.view">
+            <field name="name">mrp.workcenter.form.view.inherit.inherit.ortholite</field>
+            <field name="model">mrp.workcenter</field>
+            <field name="inherit_id" ref="mrp_workorder.mrp_workcenter_form_view_inherit"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='employee_costs_hour']" position="attributes">
+                    <attribute name="groups">ortholite_restrict_cost_visibility.group_cost_visibility</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="mrp_bom_view_inherit_ortholite" model="ir.ui.view">
+            <field name="name">mrp.bom.form.inherit.ortholite</field>
+            <field name="model">mrp.bom</field>
+            <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='%(mrp.action_report_mrp_bom)d']" position="attributes">
+                    <attribute name="groups">ortholite_restrict_cost_visibility.group_cost_visibility</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="mrp.menu_mrp_reporting" model="ir.ui.menu">
+            <field name="groups_id" eval="[(4, ref('ortholite_restrict_cost_visibility.group_cost_visibility'))]"/>
+        </record>
+
+    </odoo>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="quality_check_view_tree_inherit_ortholite" model="ir.ui.view">
+        <field name="name">quality.check.view.tree.inherit.ortholite</field>
+        <field name="model">quality.check</field>
+        <field name="inherit_id" ref="quality_control.quality_check_view_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='control_date']" position="after">
+                <field name="production_id"/>
+                <field name="po_source"/>
+                <field name="so_source"/>
+                <field name="product_category"/>
+                <field name="delivery_date"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="quality_check_view_form_inherit_ortholite" model="ir.ui.view">
+        <field name="name">quality.check.view.form.inherit.ortholite</field>
+        <field name="model">quality.check</field>
+        <field name="inherit_id" ref="quality_control.quality_check_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='measure_on']" position="after">
+                <field name="po_source" invisible="so_source"/>
+                <field name="product_category"/>
+                <field name="so_source"/>
+            </xpath>
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="delivery_date"/>
+                <field name="brand_ids" widget="many2many_tags"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

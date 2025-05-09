@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="sale_register_report_wizard_form_views" model="ir.ui.view">
+        <field name="name">sale.register.report.wizard</field>
+        <field name="model">sale.register.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Sales Register">
+                <group>
+                    <group>
+                        <field name="month"/>
+                    </group>
+                    <group>
+                        <field name="year"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="print_xls_report" string="Download" class="oe_highlight" type="object" icon="fa-file-excel-o" />
+                    or
+                    <button string="Cancel" class="btn-default" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sale_register_report_wizard" model="ir.actions.act_window">
+        <field name="name">Sales Register</field>
+        <field name="res_model">sale.register.report.wizard</field>
+        <field name="view_id" ref="ortholite_account_reports.sale_register_report_wizard_form_views" />
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_sale_register_report_wizard"
+        name="Sales Register"
+        parent="account.menu_finance_reports"
+        action="ortholite_account_reports.action_sale_register_report_wizard"
+        sequence="201"
+    />
+    
+</odoo>

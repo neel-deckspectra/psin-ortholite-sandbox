@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="approval_request_view_form_customer" model="ir.ui.view">
+        <field name="name">approval.request.view.form.knk</field>
+        <field name="model">approval.request</field>
+        <field name="inherit_id" ref="approvals.approval_request_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='date_confirmed']" position="after">
+                <field name="partner_id" invisible="approval_type != 'customer'" required="approval_type == 'customer'"/>
+                <field name="contacts_type" invisible="approval_type != 'customer'"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

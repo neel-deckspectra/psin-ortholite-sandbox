@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="mail_activity_type_view_form_inherit_ortholite_sales" model="ir.ui.view">
+        <field name="name">mail.activity.type.form</field>
+        <field name="model">mail.activity.type</field>
+        <field name="inherit_id" ref="mail.mail_activity_type_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='category']" position="before">
+                <field name="is_visit"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="mail_activity_view_form_popup_inherit_ortholite_sales" model="ir.ui.view">
+        <field name="name">mail.activity.form</field>
+        <field name="model">mail.activity</field>
+        <field name="inherit_id" ref="mail.mail_activity_view_form_popup"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='activity_type_id']" position="after">
+                <field name="is_visit" invisible="1"/>
+                <field name="product_attribute_value_id" options="{'no_create': True, 'no_edit': True}" context="{'brand_attribute_value': True}" invisible="not is_visit"/>
+                <field name="season_id" invisible="not is_visit" options="{'no_create': True, 'no_edit': True}"/>
+            </xpath>
+            <xpath expr="//field[@name='note']" position="attributes">
+                <attribute name="invisible">is_visit</attribute>
+            </xpath>
+            <xpath expr="//field[@name='note']" position="after">
+                <notebook invisible="not is_visit">
+                    <page name="Purpose of Visit">
+                        <field name="purpose_of_visit"/>
+                    </page>
+                    <page name="Factory Contact">
+                        <field name="factory_contact"/>
+                    </page>
+                    <page name="Ortholite Grades Used">
+                        <field name="grades_used"/>
+                    </page>
+                    <page name="Competitor Info">
+                        <field name="competitor_info"/>
+                    </page>
+                    <page name="Remarks">
+                        <field name="remarks"/>
+                    </page>
+                </notebook>
+            </xpath>
+        </field>
+    </record>
+</odoo>

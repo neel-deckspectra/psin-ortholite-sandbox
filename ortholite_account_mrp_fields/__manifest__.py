@@ -1,0 +1,47 @@
+# -*- coding: utf-8 -*-
+{
+    'name': "Account, MRP Customization",
+    'description': "Add a fields in the Account, MRP app",
+    'odoo_task_id': "3871570",
+    'description': "Add a fields in the Account, MRP, PLM, Quality app",
+    'odoo_task_id': "3871570, 3960873",
+    'author': "Odoo PS-IN",
+    'website': "https://www.odoo.com/",
+    'category': 'Customization',
+    'version': '1.0',
+    'depends': [
+        'account_accountant',
+        'mrp',
+        'mrp_plm',
+        'purchase',
+        'quality_control',
+        'sale_management',
+        'account_asset',
+        'maintenance',
+    ],
+    'data': [
+        'data/product_attribute_data.xml',
+        'data/unpaid_bill_reminder_data.xml',
+        'data/sequence.xml',
+        'views/account_move_views.xml',
+        'views/mrp_production_views.xml',
+        'views/mrp_eco_views.xml',
+        'views/sale_order_views.xml',
+        'report/sale_templates.xml',
+        'views/quality_control_view.xml',
+        'views/res_config_settings_views.xml',
+        'views/account_asset_views.xml',
+        'report/asset_qr_code_report.xml',
+        'views/created_date_on_accounting_views.xml',
+        'views/account_bank_statement_line_view.xml',
+    ],
+    'assets': {
+        'web.assets_backend': [
+            'ortholite_account_mrp_fields/static/src/views/**/*',
+        ]
+    },
+    'application': False,
+    'installable': True,
+    'auto_install': False,
+    'license' : 'LGPL-3',
+}

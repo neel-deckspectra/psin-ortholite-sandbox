@@ -1,0 +1,10 @@
+<odoo>
+    <data noupdate="1">
+
+        <record id="product_attribute_brand_radio" model="product.attribute" forcecreate="0">
+            <field name="name">Brand</field>
+            <field name="sequence">10</field>
+        </record>
+
+    </data>
+</odoo>

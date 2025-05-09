@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <odoo>
+
+         <record id="product_product_stock_tree_inherit_stock_account_inherit_ortholite" model="ir.ui.view">
+            <field name="name">product.product.stock.tree.inherit.stock.account.inherit.ortholite</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="stock_account.product_product_stock_tree_inherit_stock_account"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='avg_cost']" position="attributes">
+                    <attribute name="groups">ortholite_restrict_cost_visibility.group_cost_visibility</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="stock_valuation_layer_tree_inherit_ortholite" model="ir.ui.view">
+            <field name="name">stock.valuation.layer.tree.inherit.ortholite</field>
+            <field name="model">stock.valuation.layer</field>
+            <field name="inherit_id" ref="stock_account.stock_valuation_layer_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='unit_cost']" position="attributes">
+                    <attribute name="groups">ortholite_restrict_cost_visibility.group_cost_visibility</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="stock.stock_move_menu" model="ir.ui.menu">
+            <field name="groups_id" eval="[(4, ref('ortholite_restrict_cost_visibility.group_cost_visibility'))]"/>
+        </record>
+
+    </odoo>

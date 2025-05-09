@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<odoo>
+    <record id="season_list_views" model="ir.ui.view">
+        <field name="name">season.tree</field>
+        <field name="model">season</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_season_list_views" model="ir.actions.act_window">
+        <field name="name">Season</field>
+        <field name="res_model">season</field>
+        <field name='view_mode'>tree</field>
+        <field name="view_id" ref="ortholite_sales.season_list_views" />
+        <field name="binding_model_id" ref="model_season"/>
+    </record>
+
+    <menuitem id="menu_season"
+        name="Season"
+        parent="crm.crm_menu_config"
+        action="ortholite_sales.action_season_list_views"
+        sequence="12"
+    />
+    
+</odoo>
