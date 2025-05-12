@@ -105,7 +105,7 @@ class MergeRfq(models.TransientModel):
             # New implementation: Update origin field by combining origins of merged orders
             origins = set(order.origin for order in purchase_orders if order.origin)
             selected_po.origin = ', '.join(origins)
-            # Set the selected purchase order as the origin of the merged orders
+            # Set the new purchase order as the origin of the merged orders
             for order in purchase_orders:
                 if order != selected_po:
                     order.sudo().button_cancel()
