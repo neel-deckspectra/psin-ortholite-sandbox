@@ -76,10 +76,6 @@ class MergeRfq(models.TransientModel):
                         order_line.product_qty += line.product_qty
                     else:
                         line.copy(default={"order_id": new_po.id})
-            # New implementation: Update origin field by combining origins of merged orders
-            origins = set(order.origin for order in purchase_orders if order.origin)
-            new_po.origin = ', '.join(origins)
-            # Set the new purchase order as the origin of the merged orders
             for order in purchase_orders:
                 order.sudo().button_cancel()
                 if self.merge_type == "delete_and_new":
@@ -102,10 +98,6 @@ class MergeRfq(models.TransientModel):
                     else:
                         line.copy(
                             default={"order_id": self.purchase_order_id.id})
-            # New implementation: Update origin field by combining origins of merged orders
-            origins = set(order.origin for order in purchase_orders if order.origin)
-            selected_po.origin = ', '.join(origins)
-            # Set the new purchase order as the origin of the merged orders
             for order in purchase_orders:
                 if order != selected_po:
                     order.sudo().button_cancel()

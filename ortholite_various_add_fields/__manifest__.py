@@ -15,6 +15,7 @@
         'purchase_request',
         'approvals',
         'stock_enterprise',
+        'merge_rfq',
     ],
     'data': [
         'security/ir.model.access.csv',
@@ -42,6 +43,8 @@
         'data/purchase_request_sequence.xml',
         'wizard/purchase_request_line_make_purchase_order_view.xml',
         'wizard/grn_picking_report_views.xml',
+        'wizard/spend_analysis_view.xml',
+
     ],
     'application': False,
     'installable': True,
